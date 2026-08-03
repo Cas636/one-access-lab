@@ -44,14 +44,14 @@ services:
     ports:
       - "9011:9011"
 
-  frontend:
-      build:
-        context: ./frontend
-        dockerfile: Dockerfile
-      container_name: c-frontend-react
-      ports:
-        - "3000:80"
-      restart: always
+  #frontend:
+   #   build:
+    #    context: ./frontend
+     #   dockerfile: Dockerfile
+      #container_name: c-frontend-react
+      #ports:
+       # - "3000:80"
+      #restart: always
 
 volumes:
   postgres_data:

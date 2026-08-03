@@ -1,0 +1,118 @@
+/* 1. Variables globales (Tema y Configuración) */
+:root {
+  /* Colores */
+  --color-bg-dark: #1e293b;
+  --color-text-dark: #1e293b;
+  --color-text-light: #f8fafc;
+  --color-text-muted: #64748b;
+  
+  --color-primary: #f58320;
+  --color-primary-hover: #ea580c;
+
+  /* Tipografía y Layout */
+  --font-family-base: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-size-base: 14px;
+  --radius-sm: 6px;
+  --transition-fast: 0.2s ease-in-out;
+}
+
+/* 2. Reset Global Correcto */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* 3. Base del documento */
+body {
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-base);
+  color: var(--color-text-dark);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 4. Clases Utilitarias */
+.white {
+  color: #ffffff;
+}
+
+.centerContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+/* 5. Componentes */
+
+/* Barra Superior */
+.titlebar {
+  background-color: var(--color-bg-dark);
+  color: var(--color-text-light);
+  min-height: 80px;
+  margin-bottom: 36px;
+  padding: 0 24px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+/* Botón interactivo */
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 20px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background-color: var(--color-primary);
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color var(--transition-fast), transform 0.1s ease;
+}
+
+.button:hover:not(:disabled) {
+  background-color: var(--color-primary-hover);
+}
+
+.button:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.button:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.button:disabled {
+  background-color: var(--color-bg-dark);
+  color: var(--color-text-muted);
+  cursor: not-allowed;
+  opacity: 0.8;
+}
+
+/* Grid Informativo Responsivo */
+.userInfoGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  width: 100%;
+}
+
+/* Añade esto temporalmente al final de tu CSS para comprobar si carga */
+body {
+  background-color: #0f172a; /* Fondo oscuro global */
+  color: #f8fafc;           /* Texto claro global */
+}
+
+.button {
+  box-shadow: 0 4px 14px rgba(245, 131, 32, 0.4); /* Sombra naranja brillante */
+  border-radius: 10px;                          /* Bordes más redondeados */
+}
