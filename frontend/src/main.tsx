@@ -1,19 +1,19 @@
 import { StrictMode } from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
-import Home from './Home';
+import Home from './home.tsx';
 import Account from './account';
 import { FusionAuthProvider } from '@fusionauth/react-sdk';
 import type { FusionAuthProviderConfig } from '@fusionauth/react-sdk';
 
 const fusionAuthProviderConfig: FusionAuthProviderConfig = { 
-  redirectUri: 'http://localhost:5173', 
-  postLogoutRedirectUri: 'http://localhost:5173',
+  redirectUri: import.meta.env.VITE_REDIRECT_URI, 
+  postLogoutRedirectUri: import.meta.env.VITE_REDIRECT_URI_POST_LOGOUT,
   shouldAutoRefresh: true,
-  shouldAutoFetchUserInfo: true,
+  shouldAutoFetchUserInfo: false,
   scope: 'openid email profile offline_access',
-  clientId: '94ef0899-0429-40b6-864f-4b2cb00a595a',
-  serverUrl: 'http://localhost:9011',
+  clientId: import.meta.env.VITE_CLIENT_ID,
+  serverUrl: import.meta.env.VITE_FUSIONAUTH_URL,
   onRedirect: () => { console.log('Login successful'); }
 };
 

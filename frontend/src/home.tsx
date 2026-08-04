@@ -5,25 +5,20 @@ import { useEffect } from 'react';
 export default function Home() {
   const navigate = useNavigate();
 
-  const { isLoggedIn, startLogin, startLogout, userInfo } = useFusionAuth();
+  const { isLoggedIn, startLogin } = useFusionAuth();
+
   useEffect(() => {
-    // Post-authentication redirect to account page
-    if (isLoggedIn && sessionStorage.getItem('justLoggedIn') === 'true') {
+    // Si ya está autenticado, limpiar la sesión y redirigir al componente account
+    if (isLoggedIn) {
       sessionStorage.removeItem('justLoggedIn');
       navigate("/account");
     }
   }, [isLoggedIn, navigate]);
 
   return (
-    // show logout button for authenticated users, login button for all others
     <div>
       <div className="titlebar">
-        {isLoggedIn ? (
-          <>
-          <span className='white'>{userInfo?.email}</span>
-          <button className='button' onClick={() => startLogout()}>Logout</button>
-          </>
-        ) : (
+        {!isLoggedIn && (
           <button
             className='button'
             onClick={() => {
@@ -40,4 +35,4 @@ export default function Home() {
       </div>
     </div>
   );
-};
+}
