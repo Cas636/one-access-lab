@@ -2,8 +2,8 @@
 #_*_ codig: utf8 _*_
 
 #  IMPORTACIONES 
-from fastapi import APIRouter, Depends, Cookie, HTTPException, status  # Framework FastAPI para crear APIs REST
-from modules.functions import verify_jwt, get_public_key, logging_setup
+from fastapi import APIRouter, Cookie, HTTPException, status  # Framework FastAPI para crear APIs REST
+from modules.functions import get_public_key, logging_setup
 from jose import jwt, JWTError
 
 #  CONFIGURACIÓN DEL ROUTER 
@@ -16,7 +16,6 @@ profile_app=APIRouter()
 @profile_app.get("/api/account/profile")
 def get_user_profile(app_at: str | None = Cookie(default=None, alias="app.at")):
     logger = logging_setup()
-    logger(app_at)
     """
     Lee la cookie de autenticación (ej. 'app_at' o el nombre que asigne FusionAuth)
     enviada automáticamente por el navegador.
@@ -27,6 +26,7 @@ def get_user_profile(app_at: str | None = Cookie(default=None, alias="app.at")):
             detail="No se encontró la cookie de sesión"
         )
     try:
+        
         public_key = get_public_key(app_at)
         payload = jwt.decode(
             app_at,

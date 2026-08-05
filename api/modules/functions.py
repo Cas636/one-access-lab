@@ -12,9 +12,9 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 load_dotenv()
 
 # URL de FusionAuth donde publica sus llaves públicas (JWKS - JSON Web Key Set)
-# Cambia '127.0.0.1:9011' por tu dominio de FusionAuth
 
 def get_public_key(token: str):
+    logger = logging_setup()
     """
     Obtiene la llave pública de FusionAuth para verificar la firma del JWT.
     """
@@ -22,7 +22,6 @@ def get_public_key(token: str):
         unverified_header = jwt.get_unverified_header(token)
         with urllib.request.urlopen(os.getenv("FUSIONAUTH_JWKS_URL")) as response:
             jwks = json.loads(response.read().decode())
-        
         # Buscar la llave que coincide con el 'kid' del token
         for key in jwks.get("keys", []):
             if key["kid"] == unverified_header.get("kid"):
@@ -55,7 +54,7 @@ async def verify_jwt(token: str = Depends(oauth2_scheme)):
         
         return payload # Retorna los datos del usuario (claims)
     except JWTError:
-        #logger.warning(credentials_exception)
+        logger.warning(credentials_exception)
         raise credentials_exception
     
     

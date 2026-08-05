@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useFusionAuth } from '@fusionauth/react-sdk';
 import { useEffect, useState } from 'react';
+import './home.css';
 
 export default function Account() {
   const navigate = useNavigate();
@@ -38,7 +39,7 @@ export default function Account() {
     <div>
       <div className="titlebar">
         <span className='white'>{newUserInfo?.email}</span>
-        <button className='button' onClick={() => startLogout()}>Logout</button>
+        <button className='button headerButton' onClick={() => startLogout()}>Logout</button>
       </div>
       <div className='centerContainer'>
         <div className="userInfoGrid">

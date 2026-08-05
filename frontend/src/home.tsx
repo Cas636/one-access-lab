@@ -1,10 +1,10 @@
 import { useNavigate } from 'react-router-dom';
 import { useFusionAuth } from '@fusionauth/react-sdk';
 import { useEffect } from 'react';
+import './home.css';
 
 export default function Home() {
   const navigate = useNavigate();
-
   const { isLoggedIn, startLogin } = useFusionAuth();
 
   useEffect(() => {
@@ -16,22 +16,39 @@ export default function Home() {
   }, [isLoggedIn, navigate]);
 
   return (
-    <div>
-      <div className="titlebar">
-        {!isLoggedIn && (
-          <button
-            className='button'
-            onClick={() => {
-              sessionStorage.setItem('justLoggedIn', 'true');
-              startLogin();
-            }}
-          >
-            Login
-          </button>
-        )}
-      </div>
-      <div className='centerContainer'>
-        <div>Log in to request your information</div>
+    <div className="landingWrapper">
+      <header className="titlebar">
+        <div className="landingLogo">
+          <span className="logoText">ONE<span className="highlight">V</span>GAMES</span>
+        </div>
+      </header>
+      <div className="landingPage">
+        <div className="centerContainer">
+          <div className="formLanding">
+
+            <div className="landingTitle">
+              <span>¡Todo el streaming de videojuegos en un sólo lugar!</span>
+            </div>
+
+            <div className="landingSubtitle">
+              <span>Las mejores gameplays, torneos en vivo, game-trailers y eSports.</span>
+            </div>
+
+            <div className="YBmSgLBT">
+              <button
+                className="button landingRegisterBtn"
+                type="button"
+                id="btn_register_ld"
+                onClick={() => {
+                  sessionStorage.setItem('justLoggedIn', 'true');
+                  startLogin();
+                }}
+              >
+                REGÍSTRATE O INICIA SESIÓN
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

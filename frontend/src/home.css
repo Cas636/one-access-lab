@@ -1,42 +1,89 @@
-/* 1. Variables globales (Tema y Configuración) */
+/* 1. Variables y Mapeo Principal */
 :root {
-  /* Colores */
-  --color-bg-dark: #1e293b;
-  --color-text-dark: #1e293b;
-  --color-text-light: #f8fafc;
-  --color-text-muted: #64748b;
+  --page-background: #0f0c1b;
+  --panel-background: #1e1b2e;
+  --primary-button: #8b5cf6;
+  --primary-button-focus: #7c3aed;
+  --font-color: #ffffff;
   
-  --color-primary: #f58320;
-  --color-primary-hover: #ea580c;
+  --color-bg-dark: var(--page-background);
+  --color-surface: var(--panel-background);
+  --color-text-light: var(--font-color);
+  --color-text-muted: #7c8592;
+  
+  --color-primary: var(--primary-button);
+  --color-primary-hover: var(--primary-button-focus);
 
-  /* Tipografía y Layout */
-  --font-family-base: 'Inter', system-ui, -apple-system, sans-serif;
-  --font-size-base: 14px;
-  --radius-sm: 6px;
+  --font-family-base: Inter, -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --radius-sm: var(--rounded, 0.5rem);
   --transition-fast: 0.2s ease-in-out;
 }
 
-/* 2. Reset Global Correcto */
+/* 2. Reset Global y Fondo Global con Imagen */
 *,
 *::before,
 *::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  border: 0 solid;
 }
 
-/* 3. Base del documento */
 body {
   font-family: var(--font-family-base);
-  font-size: var(--font-size-base);
-  color: var(--color-text-dark);
+  color: var(--color-text-light);
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+
+  /* Aplicamos el fondo con gradiente e imagen globalmente a toda la app */
+  background-image: 
+    linear-gradient(to bottom, rgba(15, 12, 27, 0.7), rgba(15, 12, 27, 0.95)), 
+    url('/background.png'); 
+  
+  background-color: var(--color-bg-dark);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
 }
 
-/* 4. Clases Utilitarias */
-.white {
-  color: #ffffff;
+/* 3. Estructura general de la Landing */
+.landingWrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Barra Superior */
+.titlebar {
+  background-color: var(--color-surface);
+  min-height: 70px;
+  padding: 0 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.logoText {
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--color-text-light);
+}
+
+.logoText .highlight {
+  color: var(--color-primary);
+}
+
+/* Contenedor Centrado */
+.landingPage {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
 }
 
 .centerContainer {
@@ -45,35 +92,61 @@ body {
   justify-content: center;
   align-items: center;
   width: 100%;
+  max-width: 600px;
 }
 
-/* 5. Componentes */
-
-/* Barra Superior */
-.titlebar {
-  background-color: var(--color-bg-dark);
-  color: var(--color-text-light);
-  min-height: 80px;
-  margin-bottom: 36px;
-  padding: 0 24px;
+.formLanding {
   display: flex;
-  justify-content: flex-end;
+  flex-direction: column;
   align-items: center;
+  text-align: center;
+  width: 100%;
+  padding: 40px 20px;
+  background-color: var(--color-surface);
+  border-radius: var(--radius-sm);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
 }
 
-/* Botón interactivo */
+/* Tipografía de la Landing */
+.landingTitle {
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin-bottom: 16px;
+  color: var(--color-text-light);
+  line-height: 1.2;
+}
+
+.landingSubtitle {
+  font-size: 1.1rem;
+  color: var(--color-text-muted);
+  margin-bottom: 32px;
+  max-width: 480px;
+}
+
+/* Contenedores de Botones Alineados */
+.YBmSgLBT {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  max-width: 360px;
+  margin-bottom: 14px;
+}
+
+/* Botón interactivo principal */
 .button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 10px 20px;
+  width: 100%;
+  padding: 14px 24px;
   border: none;
   border-radius: var(--radius-sm);
   background-color: var(--color-primary);
-  color: #ffffff;
+  color: var(--primary-button-text, #ffffff);
   font-family: inherit;
-  font-size: 0.95rem;
-  font-weight: 500;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
   cursor: pointer;
   transition: background-color var(--transition-fast), transform 0.1s ease;
 }
@@ -86,33 +159,9 @@ body {
   transform: translateY(1px);
 }
 
-.button:focus-visible {
-  outline: 2px solid var(--color-primary);
-  outline-offset: 2px;
-}
-
-.button:disabled {
-  background-color: var(--color-bg-dark);
-  color: var(--color-text-muted);
-  cursor: not-allowed;
-  opacity: 0.8;
-}
-
-/* Grid Informativo Responsivo */
-.userInfoGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 16px;
-  width: 100%;
-}
-
-/* Añade esto temporalmente al final de tu CSS para comprobar si carga */
-body {
-  background-color: #0f172a; /* Fondo oscuro global */
-  color: #f8fafc;           /* Texto claro global */
-}
-
-.button {
-  box-shadow: 0 4px 14px rgba(245, 131, 32, 0.4); /* Sombra naranja brillante */
-  border-radius: 10px;                          /* Bordes más redondeados */
+/* Modificador específico para el botón del Header */
+.headerButton {
+  width: auto !important;
+  padding: 8px 18px;
+  font-size: 0.9rem;
 }
