@@ -185,8 +185,6 @@ A continuación se describe qué pantallas debería mostrar la aplicación.
 4. **Estado de Docker Compose**
    - Servicios `mailhog`, `database`, `fusionauth`, `frontend`, `backend` funcionando.
 
-> Si quieres agregar imágenes reales, crea la carpeta `docs/screenshots/` y añade los archivos allí. Luego reemplaza los placeholders del README con las rutas `docs/screenshots/<nombre>.png`.
-
 ## Notas adicionales
 
 - El backend usa `api/.env` para leer `FRONTEND_URI`.
