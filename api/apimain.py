@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #_*_ codig: utf8 _*_
 from fastapi import FastAPI
-from routers import status_api, profile_api
+from routers import status_api, profile_api, content_api
 import uvicorn
 import os
 from fastapi import FastAPI
@@ -26,6 +26,9 @@ app.include_router(status_api.status_app)
 
 # Router 
 app.include_router(profile_api.profile_app)
+
+# Router 
+app.include_router(content_api.content_app)
 
 # Ejecución local opcional para desarrollo.
 # uvicorn main:app --port 5000 --ssl-keyfile=./key.pem --ssl-certfile=./cert.pem

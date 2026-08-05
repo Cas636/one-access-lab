@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import Home from './home.tsx';
 import Account from './account';
+import Content from './content';
 import './home.css';
 import { FusionAuthProvider } from '@fusionauth/react-sdk';
 import type { FusionAuthProviderConfig } from '@fusionauth/react-sdk';
@@ -23,6 +24,7 @@ function App() {
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/account" element={<Account />} />
+      <Route path="/content" element={<Content />} />
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>
   );
