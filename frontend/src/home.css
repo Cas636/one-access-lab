@@ -36,13 +36,12 @@ body {
   -webkit-font-smoothing: antialiased;
   min-height: 100vh;
 
-  /* Aplicamos el fondo con gradiente e imagen globalmente a toda la app */
   background-image: 
-    linear-gradient(to bottom, rgba(15, 12, 27, 0.7), rgba(15, 12, 27, 0.95)), 
-    url('/background.png'); 
+    url('/background.png');
   
   background-color: var(--color-bg-dark);
-  background-size: cover;
+  /* Cambia 'cover' por '100% 100%' si quieres que la imagen ajuste exactamente a los bordes de la pantalla */
+  background-size: cover; 
   background-position: center;
   background-repeat: no-repeat;
   background-attachment: fixed;
