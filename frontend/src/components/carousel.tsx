@@ -1,6 +1,6 @@
 import React from 'react';
 import useEmblaCarousel from 'embla-carousel-react';
-import './carousel.css'; // Importación del archivo CSS
+import '../styles/Carousel.css'; 
 
 interface Video {
     id: string;

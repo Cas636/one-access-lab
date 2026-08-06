@@ -1,10 +1,15 @@
 import { StrictMode } from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
-import Home from './home.tsx';
-import Account from './account';
-import Content from './content';
-import './home.css';
+import { UserProvider } from './context/UserContext';
+import PublicLayout from "./layouts/PublicLayout";
+import PrivateLayout from "./layouts/PrivateLayout";
+
+import Home from "./pages/Home";
+import Account from "./pages/Account";
+import Content from "./pages/Content";
+
+import './styles/Home.css';
 import { FusionAuthProvider } from '@fusionauth/react-sdk';
 import type { FusionAuthProviderConfig } from '@fusionauth/react-sdk';
 
@@ -22,9 +27,13 @@ const fusionAuthProviderConfig: FusionAuthProviderConfig = {
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/account" element={<Account />} />
-      <Route path="/content" element={<Content />} />
+      <Route element={<PublicLayout />}>
+        <Route path="/" element={<Home />} />
+      </Route>
+      <Route element={<PrivateLayout />}>      
+        <Route path="/content" element={<Content />} />
+        <Route path="/account" element={<Account />} />
+      </Route>
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>
   );
@@ -34,7 +43,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <BrowserRouter>
       <FusionAuthProvider {...fusionAuthProviderConfig}>
-        <App />
+        <UserProvider>
+          <App />
+        </UserProvider>
       </FusionAuthProvider>
     </BrowserRouter>
   </StrictMode>

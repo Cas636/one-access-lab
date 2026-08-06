@@ -1,27 +1,23 @@
 import { useNavigate } from 'react-router-dom';
 import { useFusionAuth } from '@fusionauth/react-sdk';
 import { useEffect } from 'react';
-import './home.css';
+import '../styles/Home.css';
 
 export default function Home() {
   const navigate = useNavigate();
   const { isLoggedIn, startLogin } = useFusionAuth();
+  
 
   useEffect(() => {
-    // Si ya está autenticado, limpiar la sesión y redirigir al componente account
+    // Si ya está autenticado, limpiar la sesión y redirigir al componente content
     if (isLoggedIn) {
       sessionStorage.removeItem('justLoggedIn');
-      navigate("/account");
+      navigate("/content");
     }
   }, [isLoggedIn, navigate]);
 
   return (
     <div className="landingWrapper">
-      <header className="titlebar">
-        <div className="landingLogo">
-          <span className="logoText">ONE<span className="highlight">V</span>GAMES</span>
-        </div>
-      </header>
       <div className="landingPage">
         <div className="centerContainer">
           <div className="formLanding">

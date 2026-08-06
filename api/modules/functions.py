@@ -66,67 +66,56 @@ def logging_setup():
     return logger
 
 
-def local_content():
+def local_content_movies():
     logger = logging_setup()
-    TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3MzBjNDEwYTNiNGVjNTAzYWQ5ZTZkZDU5MTc4NmFiMyIsIm5iZiI6MTc4NTk2Njg0MS4wNzIsInN1YiI6IjZhNzNiMGY5OWQ2MmY0YmQ4YjM5ZjNkZSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.EYsy-13JdPBubtG2dyqjKGqH1na7H6xLtBlQuchKoC0"
-    url = "https://api.themoviedb.org/3/trending/movie/day"
-    BASE_IMAGE = "https://image.tmdb.org/t/p/w500"
+    
     req = urllib.request.Request(
-        url,
+        os.getenv("urlTrendingMovies"),
         headers={
-            "Authorization": f"Bearer {TOKEN}",
+            
+            "Authorization": f"Bearer {os.getenv('TOKEN')}",
             "accept": "application/json"
         }
     )
     with urllib.request.urlopen(req) as response:
-        movies = json.loads(response.read().decode())
-    logger.info("Hace la consulta")
-    # Simulación de una base de datos o catálogo de videos
-    VIDEOS_MOCK = {
-        "1": {
-            "id": "1",
-            "title": "The Last of Us Part I - Cinematic Walkthrough",
-            "category": "Videojuegos",
-            "thumbnail": "https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=500",
-            "duration": "14:20",
-            "description": "Una mirada cinemática a los momentos más épicos de la aventura de Joel y Ellie."
-        },
-        "2": {
-            "id": "2",
-            "title": "Cyberpunk 2077: Phantom Liberty - Official Trailer",
-            "category": "Videojuegos",
-            "thumbnail": "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=500",
-            "duration": "3:45",
-            "description": "Tráiler oficial de expansión de espionaje y suspenso en Dogtown."
-        },
-        "3": {
-            "id": "3",
-            "title": "Arcane Season 2 - Teaser Preview",
-            "category": "Series",
-            "thumbnail": "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=500",
-            "duration": "2:10",
-            "description": "El conflicto entre Piltover y Zaun llega a su punto de ebullición."
-        },
-        "4": {
-            "id": "4",
-            "title": "Elden Ring: Shadow of the Erdtree Gameplay",
-            "category": "Videojuegos",
-            "thumbnail": "https://images.unsplash.com/photo-1612287230202-1ff1d85d1bdf?w=500",
-            "duration": "8:50",
-            "description": "Explorando las nuevas y peligrosas zonas del Reino de las Sombras."
-        }
-        
-    }
-    
+        videos = json.loads(response.read().decode())
+   
     catalog = {}
 
-    for movie in movies["results"]:
-        catalog[str(movie["id"])] = {
-            "id": str(movie["id"]),
-            "title": movie["title"],
-            "category": movie["media_type"],
-            "thumbnail": BASE_IMAGE + movie["poster_path"] if movie["poster_path"] else "",
+    for video in videos["results"]:
+        catalog[str(video["id"])] = {
+            "id": str(video["id"]),
+            "title": video["title"],
+            "category": video["media_type"],
+            "thumbnail": os.getenv("BASE_IMAGE") + video["poster_path"] if video["poster_path"] else "",
             "duration": "",
-            "description": movie["overview"],
+            "description": video["overview"],
+        }
+    return catalog
+
+
+def local_content_series():
+    logger = logging_setup()
+    
+    req = urllib.request.Request(
+        os.getenv("urlTrendingTV"),
+        headers={
+            "Authorization": f"Bearer {os.getenv('TOKEN')}",
+            "accept": "application/json"
+        }
+    )
+    with urllib.request.urlopen(req) as response:
+        videos = json.loads(response.read().decode())
+   
+    catalog = {}
+
+    for video in videos["results"]:
+        catalog[str(video["id"])] = {
+            "id": str(video["id"]),
+            "title": video["name"],
+            "category": video["media_type"],
+            "thumbnail": os.getenv("BASE_IMAGE") + video["poster_path"] if video["poster_path"] else "",
+            "duration": "",
+            "description": video["overview"],
         }
     return catalog

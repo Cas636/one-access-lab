@@ -1,14 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useFusionAuth } from '@fusionauth/react-sdk';
-import { VideoCarousel } from './components/carousel';
-import './home.css';
-
-interface UserProfile {
-    email?: string;
-    given_name?: string;
-    family_name?: string;
-}
+import { VideoCarousel } from '../components/Carousel';
+import '../styles/Home.css';
 
 interface Video {
     id: string;
@@ -19,11 +13,10 @@ interface Video {
     description: string;
 }
 
-export default function Account() {
+export default function Content() {
     const navigate = useNavigate();
-    const { isLoggedIn, isFetchingUserInfo, startLogout } = useFusionAuth();
+    const { isLoggedIn, isFetchingUserInfo } = useFusionAuth();
 
-    const [userData, setUserData] = useState<UserProfile | null>(null);
     const [videos, setVideos] = useState<Video[]>([]);
     const [loading, setLoading] = useState(true);
 
@@ -44,13 +37,11 @@ export default function Account() {
             }
              
             const data = await response.json();
-            
             const rawContent = data.content || data; 
             const videosArray = Array.isArray(rawContent) 
                 ? rawContent 
                 : Object.values(rawContent);
 
-            setUserData(data.user || null);
             setVideos(videosArray);
         } catch (error) {
             console.error("Hubo un problema con la petición:", error);
@@ -63,12 +54,7 @@ export default function Account() {
     useEffect(() => {
         // Esperamos a que FusionAuth termine de validar la sesión antes de redirigir o cargar
         if (isFetchingUserInfo) return;
-
-        if (!isLoggedIn) {
-            navigate("/");
-            return;
-        }
-
+        if (!isLoggedIn) {navigate("/"); return; }
         getUserInfo();
     }, [isLoggedIn, isFetchingUserInfo, navigate]);
 
@@ -82,22 +68,16 @@ export default function Account() {
     }
 
     const peliculas = videos.filter(v => v.category === 'movie');
+    const series = videos.filter(v => v.category === 'tv');
 
     return (
         <div>
-            <div className="titlebar">
-                <span className="white">{userData?.email}</span>
-                <button className="button headerButton" onClick={startLogout}>
-                    Logout
-                </button>
-            </div>
-
             <div>
                 {/* Carrusel de Videojuegos */}
                 <VideoCarousel title="Videos Populares" videos={peliculas} />
 
-                {/* Carrusel de Series 
-                <VideoCarousel title="Series del Momento" videos={series} />*/}
+                {/* Carrusel de Series */}
+                <VideoCarousel title="Series del Momento" videos={series} />
             </div>
         </div>
     );

@@ -164,3 +164,78 @@ body {
   padding: 8px 18px;
   font-size: 0.9rem;
 }
+
+.headerRight {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.headerRight .white {
+  white-space: nowrap;
+}
+
+.headerRight .white {
+  max-width: 220px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+
+@media (max-width: 768px) {
+
+  .titlebar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+    padding: 16px;
+  }
+
+  .landingLogo {
+    display: flex;
+    justify-content: center;
+  }
+
+  .headerRight {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .headerButton {
+    flex: 1;
+    min-width: 120px;
+  }
+
+  .headerRight .white {
+    width: 100%;
+    text-align: center;
+    max-width: none;
+  }
+}
+
+.headerButton {
+  text-decoration: none;
+}
+
+.headerRight a {
+  text-decoration: none;
+}
+
+
+.titlebar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.headerNav {
+    display: flex;
+    gap: 12px;
+}
+
+.headerUser {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
