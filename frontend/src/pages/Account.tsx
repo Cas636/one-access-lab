@@ -17,15 +17,20 @@ export default function Account() {
   if (!isLoggedIn || isFetchingUserInfo) return null;
 
   return (
-    <div>
-      <div className="centerContainer">
-        <div className="userInfoGrid">
-          <div>Name:</div>
-          <div>{user?.given_name} {user?.family_name}</div>
-          <div>Birthdate:</div>
-          <div>{user?.birthDate}</div>
-        </div>
-      </div>
+<div className="profileCard">
+
+    <h2 className="profileTitle">Perfil de Usuario</h2>
+
+    <div className="infoCard">
+        <span>Nombre</span>
+        <strong>{user?.given_name} {user?.family_name}</strong>
     </div>
+
+    <div className="infoCard">
+        <span>Fecha de Nacimiento</span>
+        <strong>{user?.birthDate}</strong>
+    </div>
+
+</div>
   );
 }

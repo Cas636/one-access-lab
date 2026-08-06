@@ -23,8 +23,8 @@ export const VideoCarousel: React.FC<VideoCarouselProps> = ({ title, videos }) =
         <div className="carousel-container">
             <h2 className="carousel-title">{title}</h2>
             
-            <div ref={emblaRef} className="embla-viewport">
-                <div className="embla-container">
+            <div className="embla-viewport"  ref={emblaRef} >
+                <div className="embla__container">
                     {videos.map((video) => (
                         <div key={video.id} className="card">
                             <img 

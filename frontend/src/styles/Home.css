@@ -1,168 +1,126 @@
-/* 1. Variables y Mapeo Principal */
-:root {
-  --page-background: #0f0c1b;
-  --panel-background: #1e1b2e;
-  --primary-button: #8b5cf6;
-  --primary-button-focus: #7c3aed;
-  --font-color: #ffffff;
-  
-  --color-bg-dark: var(--page-background);
-  --color-surface: var(--panel-background);
-  --color-text-light: var(--font-color);
-  --color-text-muted: #7c8592;
-  
-  --color-primary: var(--primary-button);
-  --color-primary-hover: var(--primary-button-focus);
+/* 
+   VARIABLES
+ */
 
-  --font-family-base: Inter, -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --radius-sm: var(--rounded, 0.5rem);
-  --transition-fast: 0.2s ease-in-out;
+:root {
+  /* Colores */
+  --color-bg: #0f0c1b;
+  --color-surface: #1e1b2e;
+
+  --color-primary: #8b5cf6;
+  --color-primary-hover: #7c3aed;
+
+  --color-text: #ffffff;
+  --color-text-muted: #7c8592;
+
+  /* Tipografía */
+  --font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    "Helvetica Neue",
+    Arial,
+    sans-serif;
+
+  /* Diseño */
+  --radius: 0.5rem;
+  --transition: 0.2s ease-in-out;
 }
 
-/* 2. Reset Global y Fondo Global con Imagen */
+/* 
+   RESET
+ */
+
 *,
 *::before,
 *::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  border: 0 solid;
+  border: 0;
 }
+
+/* 
+   BODY
+ */
 
 body {
-  font-family: var(--font-family-base);
-  color: var(--color-text-light);
+  min-height: 100vh;
+  font-family: var(--font-family);
+  color: var(--color-text);
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
-  min-height: 100vh;
 
-  background-image: 
-    url('/background.png');
-  
-  background-color: var(--color-bg-dark);
-  /* Cambia 'cover' por '100% 100%' si quieres que la imagen ajuste exactamente a los bordes de la pantalla */
-  background-size: cover; 
-  background-position: center;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
+  background:
+    url("/background.png") center / cover no-repeat fixed,
+    var(--color-bg);
 }
 
-/* 3. Estructura general de la Landing */
+/* 
+   LAYOUT
+ */
+
 .landingWrapper {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
 }
 
-/* Barra Superior */
+.landingPage {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.centerContainer {
+  width: 100%;
+  max-width: 600px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* 
+   HEADER
+ */
+
 .titlebar {
-  background-color: var(--color-surface);
   min-height: 70px;
   padding: 0 40px;
+
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+  background: var(--color-surface);
+  border-bottom: 1px solid rgba(255,255,255,.1);
 }
 
 .logoText {
+  color: var(--color-text);
   font-size: 1.4rem;
   font-weight: 700;
   letter-spacing: 1px;
-  color: var(--color-text-light);
 }
 
 .logoText .highlight {
   color: var(--color-primary);
 }
 
-/* Contenedor Centrado */
-.landingPage {
-  flex: 1;
+.headerNav {
+  display: flex;
+  gap: 12px;
+}
+
+.headerUser {
   display: flex;
   align-items: center;
-  justify-content: center;
-  padding: 20px;
-}
-
-.centerContainer {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  max-width: 600px;
-}
-
-.formLanding {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  width: 100%;
-  padding: 40px 20px;
-  background-color: var(--color-surface);
-  border-radius: var(--radius-sm);
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
-}
-
-/* Tipografía de la Landing */
-.landingTitle {
-  font-size: 2.2rem;
-  font-weight: 700;
-  margin-bottom: 16px;
-  color: var(--color-text-light);
-  line-height: 1.2;
-}
-
-.landingSubtitle {
-  font-size: 1.1rem;
-  color: var(--color-text-muted);
-  margin-bottom: 32px;
-  max-width: 480px;
-}
-
-/* Contenedores de Botones Alineados */
-.YBmSgLBT {
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  max-width: 360px;
-  margin-bottom: 14px;
-}
-
-/* Botón interactivo principal */
-.button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  padding: 14px 24px;
-  border: none;
-  border-radius: var(--radius-sm);
-  background-color: var(--color-primary);
-  color: var(--primary-button-text, #ffffff);
-  font-family: inherit;
-  font-size: 1rem;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-  cursor: pointer;
-  transition: background-color var(--transition-fast), transform 0.1s ease;
-}
-
-.button:hover:not(:disabled) {
-  background-color: var(--color-primary-hover);
-}
-
-.button:active:not(:disabled) {
-  transform: translateY(1px);
-}
-
-/* Modificador específico para el botón del Header */
-.headerButton {
-  width: auto !important;
-  padding: 8px 18px;
-  font-size: 0.9rem;
+  gap: 12px;
 }
 
 .headerRight {
@@ -172,24 +130,120 @@ body {
 }
 
 .headerRight .white {
-  white-space: nowrap;
-}
-
-.headerRight .white {
   max-width: 220px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
+.headerRight a,
+.headerButton {
+  text-decoration: none;
+}
+
+/* 
+   LANDING
+ */
+
+.formLanding {
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+
+  padding: 40px 20px;
+
+  background: var(--color-surface);
+  border-radius: var(--radius);
+  box-shadow: 0 10px 25px -5px rgba(0,0,0,.3);
+}
+
+.landingTitle {
+  margin-bottom: 16px;
+
+  color: var(--color-text);
+  font-size: 2.2rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.landingSubtitle {
+  max-width: 480px;
+  margin-bottom: 32px;
+
+  color: var(--color-text-muted);
+  font-size: 1.1rem;
+}
+
+/* Contenedor de botones */
+.buttonContainer {
+  width: 100%;
+  max-width: 360px;
+
+  display: flex;
+  justify-content: center;
+
+  margin-bottom: 14px;
+}
+
+/* 
+   BOTONES
+ */
+
+.button {
+  width: 100%;
+
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+
+  padding: 14px 24px;
+
+  border-radius: var(--radius);
+
+  background: var(--color-primary);
+  color: white;
+
+  font: inherit;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: .5px;
+
+  cursor: pointer;
+
+  transition:
+    background var(--transition),
+    transform .1s ease;
+}
+
+.button:hover:not(:disabled) {
+  background: var(--color-primary-hover);
+}
+
+.button:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.headerButton {
+  width: auto;
+  padding: 8px 18px;
+  font-size: .9rem;
+}
+
+/* 
+   RESPONSIVE
+ */
 
 @media (max-width: 768px) {
 
   .titlebar {
+    padding: 16px;
+
     flex-direction: column;
     align-items: stretch;
     gap: 16px;
-    padding: 16px;
   }
 
   .landingLogo {
@@ -198,44 +252,57 @@ body {
   }
 
   .headerRight {
-    flex-wrap: wrap;
     justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .headerRight .white {
+    width: 100%;
+    max-width: none;
+    text-align: center;
   }
 
   .headerButton {
     flex: 1;
     min-width: 120px;
   }
-
-  .headerRight .white {
-    width: 100%;
-    text-align: center;
-    max-width: none;
-  }
-}
-
-.headerButton {
-  text-decoration: none;
-}
-
-.headerRight a {
-  text-decoration: none;
 }
 
 
-.titlebar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+.infoCard {
+  padding: 1rem 1.25rem;
+  margin-bottom: 1rem;
+
+  background: rgba(255,255,255,.03);
+
+  border: 1px solid rgba(255,255,255,.08);
+
+  border-radius: 12px;
+
+  transition:
+    transform .2s ease,
+    border-color .2s ease;
 }
 
-.headerNav {
-    display: flex;
-    gap: 12px;
+.infoCard:hover {
+  transform: translateY(-2px);
+  border-color: var(--color-primary);
 }
 
-.headerUser {
-    display: flex;
-    align-items: center;
-    gap: 12px;
+.infoCard span {
+  display: block;
+
+  margin-bottom: .35rem;
+
+  color: var(--color-text-muted);
+  font-size: .85rem;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+
+.infoCard strong {
+  color: var(--color-text);
+
+  font-size: 1.05rem;
+  font-weight: 600;
 }

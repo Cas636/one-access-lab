@@ -30,7 +30,7 @@ export default function Home() {
               <span>Las mejores gameplays, torneos en vivo, game-trailers y eSports.</span>
             </div>
 
-            <div className="YBmSgLBT">
+            <div className="buttonContainer">
               <button
                 className="button landingRegisterBtn"
                 type="button"

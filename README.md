@@ -157,6 +157,35 @@ npm run dev
 - `api/routers/profile_api.py`: endpoint de perfil y validación JWT.
 - `api/routers/status_api.py`: endpoint de estado.
 
+## Detalles técnicos (documentación extendida)
+
+He creado un documento técnico con descripción completa de la arquitectura, flujos, variables de entorno, diagramas y recomendaciones de despliegue.
+
+- **Archivo técnico**: [docs/TECHNICAL.md](docs/TECHNICAL.md)
+
+Revisa ese archivo para ver diagramas de secuencia, flujo de tokens, diseño de redes y recomendaciones operacionales.
+
+## Integración con TheMovieDB (TMDB)
+
+El proyecto consume datos de TheMovieDB (TMDB) desde el backend. Las variables relacionadas se encuentran en `api/.env`.
+
+- Variables y valores en `api/.env`:
+   - `TOKEN` — token/API key usado para autenticar las peticiones a TMDB (puede ser un API Key v3 o un Bearer v4 según cómo lo configures).
+   - `urlTrendingMovies` — endpoint para películas trending: `https://api.themoviedb.org/3/trending/movie/day`.
+   - `urlTrendingTV` — endpoint para series trending: `https://api.themoviedb.org/3/trending/tv/day`.
+   - `BASE_IMAGE` — base URL para imágenes: `https://image.tmdb.org/t/p/w500`.
+
+- Comportamiento:
+   - El backend realiza llamadas a TMDB para obtener listados (trending, búsquedas, etc.) y devuelve datos al frontend.
+   - El frontend consume los datos del backend; las imágenes se construyen usando `BASE_IMAGE + poster_path`.
+    ![Content](docs/screenshots/content.png)
+    
+- Recomendaciones:
+   - Guarda el token/API key en `api/.env` y **no** en repositorios públicos.
+   - Para producción, usa el método de autenticación que prefieras (v3 API Key para server-side, v4 Bearer para acceso más amplio).
+   - Considera cachear respuestas de TMDB en el backend (Redis o memoria) para reducir latencia y límites de tasa.
+
+
 ## Pantallazos del aplicativo
 
 A continuación se describe qué pantallas debería mostrar la aplicación.
