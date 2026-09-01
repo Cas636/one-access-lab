@@ -13,11 +13,13 @@ export interface User {
     given_name?: string;
     family_name?: string;
     birthDate?: string;
+    roles?: string[];
 }
 
 interface UserContextType {
     user: User | null;
     loading: boolean;
+    isAdmin: boolean;
     refreshUser: () => Promise<void>;
     clearUser: () => void;
 }
@@ -89,11 +91,14 @@ export function UserProvider({ children }: { children: ReactNode }) {
 
     }
 
+    const isAdmin = Boolean(user?.roles?.includes("admin"));
+
     return (
         <UserContext.Provider
             value={{
                 user,
                 loading,
+                isAdmin,
                 refreshUser,
                 clearUser
             }}

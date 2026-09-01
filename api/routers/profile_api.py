@@ -42,6 +42,7 @@ def get_user_profile(app_at: str | None = Cookie(default=None, alias="app.at")):
             "given_name": payload.get("given_name"),
             "family_name": payload.get("family_name"),
             "birthDate": payload.get("birthDate", ""), # Si no existe, devuelve vacío
+            "roles": payload.get("roles", []),  # Roles del usuario (user, admin)
         }
     except JWTError as e:
         raise HTTPException(

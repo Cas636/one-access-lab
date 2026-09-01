@@ -1,40 +1,68 @@
 #!/usr/bin/env python
-#_*_ codig: utf8 _*_
-from fastapi import FastAPI
-from routers import status_api, profile_api, content_api
-import uvicorn
+# _*_ coding: utf-8 _*_
+
 import os
-from fastapi import FastAPI
+from contextlib import asynccontextmanager
+
+import uvicorn
 from dotenv import load_dotenv
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-
-app = FastAPI()
+from database import create_db_and_tables
+from routers import status_api, profile_api, content_api
+from routers.administration_api import administration_app
 
 load_dotenv()
-# Configuración de CORS permitiendo que 127.0.0.1:3000 hable con tu API
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=[os.getenv("FRONTEND_URI")],  # Origen de tu React app
-    allow_credentials=True,
-    allow_methods=["*"],  # Permite GET, POST, OPTIONS, etc.
-    allow_headers=["*"],  # Permite headers como 'Authorization'
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """
+    Lifespan context manager: se ejecuta al arrancar y al detener el servidor.
+    Crea las tablas de la base de datos si no existen.
+    """
+    create_db_and_tables()
+    yield
+    # Aquí iría cleanup si fuera necesario
+
+
+app = FastAPI(
+    title="OneVGames API",
+    description="Backend para la plataforma de streaming de videojuegos ONEVGAMES",
+    version="1.0.0",
+    lifespan=lifespan
 )
 
-# Router de estado para health checks y monitoreo del servicio.
+# ---------------------------------------------------------------------------
+# CORS
+# ---------------------------------------------------------------------------
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[os.getenv("FRONTEND_URI")],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# ---------------------------------------------------------------------------
+# Routers
+# ---------------------------------------------------------------------------
+
+# Health check
 app.include_router(status_api.status_app)
 
-# Router 
+# Perfil de usuario
 app.include_router(profile_api.profile_app)
 
-# Router 
+# Contenido (catálogo, detalle, registro de vistas)
 app.include_router(content_api.content_app)
 
-# Ejecución local opcional para desarrollo.
-# uvicorn main:app --port 5000 --ssl-keyfile=./key.pem --ssl-certfile=./cert.pem
+# Administración (historial de vistas, tableros futuros)
+app.include_router(administration_app)
 
-# uvicorn.run(app, port=5000)
-
+# ---------------------------------------------------------------------------
+# Ejecución local
+# ---------------------------------------------------------------------------
 if __name__ == "__main__":
     uvicorn.run("apimain:app", host="0.0.0.0", port=8030, reload=True)
-    

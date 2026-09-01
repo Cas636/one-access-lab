@@ -7,7 +7,7 @@ import '../styles/Home.css';
 
 export default function Header() {
     const { isLoggedIn, startLogin, startLogout } = useFusionAuth();
-    const { user, loading } = useUser();
+    const { user, loading, isAdmin } = useUser();
 
     return (
         <header className="titlebar">
@@ -22,6 +22,9 @@ export default function Header() {
                     <nav className="headerNav">
                         <Link to="/content"  className="button headerButton">Inicio</Link>
                         <Link to="/account" className="button headerButton">Mi cuenta</Link>
+                        {isAdmin && (
+                            <Link to="/admin" className="button headerButton">Admin</Link>
+                        )}
                     </nav>
                     <span className="white">{loading ? "" : user?.email}</span>
 

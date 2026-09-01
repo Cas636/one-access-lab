@@ -8,6 +8,8 @@ import PrivateLayout from "./layouts/PrivateLayout";
 import Home from "./pages/Home";
 import Account from "./pages/Account";
 import Content from "./pages/Content";
+import Watch from "./pages/Watch";
+import Admin from "./pages/Admin";
 
 import './styles/Home.css';
 import { FusionAuthProvider } from '@fusionauth/react-sdk';
@@ -32,7 +34,9 @@ function App() {
       </Route>
       <Route element={<PrivateLayout />}>      
         <Route path="/content" element={<Content />} />
+        <Route path="/content/:id" element={<Watch />} />
         <Route path="/account" element={<Account />} />
+        <Route path="/admin" element={<Admin />} />
       </Route>
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>
