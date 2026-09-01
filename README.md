@@ -10,14 +10,18 @@ Este proyecto es una solución de demostración que integra:
 - PostgreSQL como base de datos
 - MailHog para capturar correos en desarrollo
 
-La aplicación permite iniciar sesión con FusionAuth y mostrar el perfil del usuario en la página de cuenta.
+La aplicación permite iniciar sesión con FusionAuth, explorar un catálogo de películas y series (obtenido de TheMovieDB), y reproducir el trailer de cada título en una página de detalle estilo Netflix. El acceso al contenido está protegido por roles (`user` / `admin`) y cada reproducción queda registrada en la base de datos.
 
 ## Arquitectura
 
 - `docker-compose.yaml`: levanta los servicios principales.
 - `frontend/`: aplicación React que usa `@fusionauth/react-sdk`.
-- `api/`: backend FastAPI que valida el JWT de FusionAuth y devuelve datos de perfil.
+- `api/`: backend FastAPI que valida el JWT de FusionAuth, sirve el catálogo y el detalle de contenido, y registra las vistas.
+- `api/database.py`: configuración de la conexión a PostgreSQL con SQLModel.
+- `api/models/watch_history.py`: modelo SQLModel de la tabla `watch_history`.
 - `api/routers/profile_api.py`: endpoint `/api/account/profile`.
+- `api/routers/content_api.py`: endpoints de catálogo, detalle de contenido y registro de vistas.
+- `api/routers/administration_api.py`: control de acceso por roles y endpoint de historial (solo `admin`).
 - `api/routers/status_api.py`: endpoint `/status` para health checks.
 
 ## Requisitos previos
@@ -49,9 +53,20 @@ POSTGRES_PASSWORD=fusionauth123
 ```env
 FRONTEND_URI=http://127.0.0.1:3000
 API_KEY_FusionAuth=<tu_api_key>
+
+# Conexión a PostgreSQL (SQLModel). Dentro de Docker el host es el nombre
+# del servicio de postgres: "database".
+DATABASE_URL=postgresql+psycopg2://fusionauth:fusionauth123@database:5432/fusionauth_db
+
+# TheMovieDB
+TOKEN=<tu_token_tmdb>
+urlTrendingMovies=https://api.themoviedb.org/3/trending/movie/day
+urlTrendingTV=https://api.themoviedb.org/3/trending/tv/day
+BASE_IMAGE=https://image.tmdb.org/t/p/w500
 ```
 
 > `FRONTEND_URI` debe coincidir con la URL desde la que se sirve el frontend.
+> Para ejecutar el backend fuera de Docker, cambia el host de `DATABASE_URL` de `database` a `127.0.0.1`.
 
 #### `frontend/.env`
 
@@ -131,6 +146,17 @@ npm run dev
    - Scopes: `openid email profile offline_access`.
 4. Verifica que la aplicación esté habilitada y asigna el `Client Id` al frontend.
 
+### Roles y control de acceso (RBAC)
+
+La aplicación usa dos roles definidos en FusionAuth. El backend los lee del claim `roles` del JWT.
+
+1. En la aplicación OpenID Connect, ve a la pestaña **Roles** y crea:
+   - `user` — puede explorar el catálogo, ver el detalle de un contenido y reproducir trailers.
+   - `admin` — todo lo anterior, más acceso al historial de vistas y a tableros de estadísticas (en construcción).
+2. Asigna el rol correspondiente a cada usuario desde **Users → (usuario) → Manage → Roles**.
+
+> Si un usuario autenticado no tiene el rol `user` ni `admin`, el backend responde `403` y la página del reproductor muestra un mensaje de acceso denegado.
+
 ## Flujo de la aplicación
 
 1. El usuario ingresa a `http://localhost:3000`.
@@ -139,22 +165,39 @@ npm run dev
 4. Después del login, el usuario es redirigido a `/account`.
 5. El backend consulta la cookie `app.at` y decodifica el token JWT,
    devolviendo el perfil con email, nombre y fecha de nacimiento.
+6. Desde `/content`, el usuario ve dos carruseles: **Videos Populares** (películas) y **Series del Momento** (series).
+7. Al hacer clic en una card, navega a `/content/:id?type=movie|tv`, donde se muestra la página del reproductor:
+   fondo (backdrop) del título, información (rating, géneros, duración, sinopsis) y el trailer de YouTube embebido.
+8. Al abrir el reproductor, el backend registra la vista en la tabla `watch_history` (usuario, contenido, título, fecha).
 
 ## Endpoints importantes
 
 - `GET /status` → estado del backend.
 - `GET /api/account/profile` → devuelve los datos del usuario autenticado.
+- `GET /api/content` → catálogo combinado de películas y series trending (requiere sesión).
+- `GET /api/content/{content_type}/{id}` → detalle de un título con backdrop, géneros, rating y clave del trailer de YouTube (`content_type`: `movie` o `tv`; requiere rol `user` o `admin`).
+- `POST /api/content/watch` → registra una vista. Body: `{ content_id, content_type, title }`. El `user_id` se extrae del JWT (requiere rol `user` o `admin`).
+- `GET /api/admin/watch-history` → historial de vistas de todos los usuarios, paginado con `limit` y `offset` (solo rol `admin`).
 
 ## Estructura del frontend
 
-- `frontend/src/main.tsx`: configuración de `FusionAuthProvider`.
-- `frontend/src/home.tsx`: página de login y redirección.
-- `frontend/src/account.tsx`: muestra datos del usuario y permite logout.
+- `frontend/src/main.tsx`: configuración de `FusionAuthProvider` y rutas.
+- `frontend/src/pages/Home.tsx`: página de login y redirección.
+- `frontend/src/pages/Account.tsx`: muestra datos del usuario y permite logout.
+- `frontend/src/pages/Content.tsx`: catálogo con los carruseles de películas y series.
+- `frontend/src/pages/Watch.tsx`: página del reproductor estilo Netflix (backdrop, info y trailer de YouTube).
+- `frontend/src/components/Carousel.tsx`: carrusel de cards clickeables (Embla). Al hacer clic navega a `/content/:id`.
+- `frontend/src/context/UserContext.tsx`: estado global del perfil de usuario.
 
 ## Estructura del backend
 
-- `api/apimain.py`: configuración de FastAPI y CORS.
+- `api/apimain.py`: configuración de FastAPI, CORS y `lifespan` (crea las tablas al arrancar).
+- `api/database.py`: engine SQLModel y sesión de base de datos.
+- `api/models/watch_history.py`: modelo de la tabla `watch_history`.
+- `api/modules/functions.py`: validación de JWT y consumo de TMDB (catálogo y detalle).
 - `api/routers/profile_api.py`: endpoint de perfil y validación JWT.
+- `api/routers/content_api.py`: catálogo, detalle de contenido y registro de vistas.
+- `api/routers/administration_api.py`: dependencias de roles (`role_required`) y endpoint de historial.
 - `api/routers/status_api.py`: endpoint de estado.
 
 ## Detalles técnicos (documentación extendida)
@@ -205,13 +248,29 @@ A continuación se describe qué pantallas debería mostrar la aplicación.
    - Botón `Logout`.
    ![logout](docs/screenshots/logout.png)
 
-3. **Panel de FusionAuth**
+3. **Catálogo de contenido**
+    ![Content](docs/screenshots/content.png)
+   - Carrusel `Videos Populares` (películas trending).
+   - Carrusel `Series del Momento` (series trending).
+   - Cada card es clickeable y lleva a la página del reproductor.
+
+4. **Reproductor de contenido** (`/content/:id`)
+   - Fondo (backdrop) del título en alta resolución con degradado.
+   - Información estilo Netflix: título, rating, géneros, duración y sinopsis.
+   - Trailer de YouTube embebido.
+   - Botón `← Volver` para regresar al catálogo conservando la navegación.
+   - Registra automáticamente la vista en `watch_history`.
+
+   > Nota: si el título no tiene trailer disponible en TMDB, se muestra un aviso "Trailer no disponible".
+
+5. **Panel de FusionAuth**
     
    - Configuración de la aplicación OpenID Connect.
    - Redirecciones configuradas.
+   - Roles `user` y `admin` definidos y asignados.
    - Usuario autenticado.
 
-4. **Estado de Docker Compose**
+6. **Estado de Docker Compose**
    - Servicios `mailhog`, `database`, `fusionauth`, `frontend`, `backend` funcionando.
 
 ## Notas adicionales
@@ -220,6 +279,9 @@ A continuación se describe qué pantallas debería mostrar la aplicación.
 - El frontend usa `frontend/.env` para construir las URLs de FusionAuth.
 - Si el login falla, revisa que `VITE_REDIRECT_URI` y `VITE_REDIRECT_URI_POST_LOGOUT` estén correctamente configurados en FusionAuth.
 - Si la API responde error 401, comprueba que la cookie `app.at` exista y sea valida.
+- Si la API responde error 403 al abrir un contenido, verifica que el usuario tenga el rol `user` o `admin` asignado en FusionAuth.
+- Si el backend falla al arrancar con `connection refused` en el puerto 5432, revisa que `DATABASE_URL` use el host `database` (dentro de Docker) y que el servicio de PostgreSQL esté saludable.
+- La tabla `watch_history` se crea automáticamente al arrancar el backend (via `lifespan` en `apimain.py`).
 
 ## Comandos útiles
 

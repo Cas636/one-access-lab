@@ -1,7 +1,61 @@
+/* Wrapper que contiene el viewport y las flechas de navegación */
+.embla {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
 .embla-viewport {
     overflow: hidden; /* Vital para que Embla oculte el desbordamiento correctamente */
     width: 100%;
     position: relative;
+}
+
+/* Flechas de navegación prev/next */
+.embla__arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 15;
+
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 1.8rem;
+    line-height: 1;
+    color: #fff;
+
+    background: rgba(15, 12, 27, 0.75);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 50%;
+    cursor: pointer;
+
+    backdrop-filter: blur(4px);
+    transition: background .2s ease, opacity .2s ease, transform .1s ease;
+}
+
+.embla__arrow:hover:not(:disabled) {
+    background: rgba(139, 92, 246, 0.85);
+}
+
+.embla__arrow:active:not(:disabled) {
+    transform: translateY(-50%) scale(0.94);
+}
+
+.embla__arrow:disabled {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.embla__arrow--prev {
+    left: 4px;
+}
+
+.embla__arrow--next {
+    right: 4px;
 }
 
 .embla__container {
@@ -97,4 +151,32 @@
 .card-duration {
     color: #bbb;
     font-size: .8rem;
+}
+
+.card-play-hint {
+    display: inline-block;
+    margin-top: .6rem;
+    color: #8b5cf6;
+    font-size: .85rem;
+    font-weight: 700;
+    letter-spacing: .04em;
+}
+
+/* Accesibilidad: indicador de foco para teclado */
+.card:focus-visible {
+    outline: 2px solid #8b5cf6;
+    outline-offset: 3px;
+}
+
+/* Soporte de carrusel: la tarjeta tiene su tamaño de ancho base */
+.carousel-container {
+    padding: 0 20px;
+}
+
+.carousel-title {
+    color: #fff;
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+    padding-left: 4px;
 }
