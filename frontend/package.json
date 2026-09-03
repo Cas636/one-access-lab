@@ -10,6 +10,9 @@
   },
   "dependencies": {
     "@fusionauth/react-sdk": "~2.5.1",
+    "bitmovin-player": "^8.274.0",
+    "bitmovin-player-react": "^1.2.0",
+    "bitmovin-player-ui": "^3.105.3",
     "embla-carousel": "^8.6.0",
     "embla-carousel-react": "^8.6.0",
     "react": "^19.2.8",

@@ -12,6 +12,7 @@ import Watch from "./pages/Watch";
 import Admin from "./pages/Admin";
 
 import './styles/Home.css';
+import 'bitmovin-player-ui/dist/css/bitmovinplayer-ui.css';
 import { FusionAuthProvider } from '@fusionauth/react-sdk';
 import type { FusionAuthProviderConfig } from '@fusionauth/react-sdk';
 

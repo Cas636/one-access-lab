@@ -1,11 +1,17 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { useFusionAuth } from '@fusionauth/react-sdk';
+import BitmovinVideoPlayer from '../components/BitmovinVideoPlayer';
 import '../styles/Watch.css';
 
 // ---------------------------------------------------------------------------
 // Tipos
 // ---------------------------------------------------------------------------
+
+interface Stream {
+    hls?: string;
+    dash?: string;
+}
 
 interface ContentDetail {
     id: string;
@@ -14,6 +20,7 @@ interface ContentDetail {
     thumbnail: string;
     backdrop: string;
     trailer_key: string | null;
+    stream: Stream;
     duration: string;
     genres: string[];
     rating: number;
@@ -219,28 +226,17 @@ export default function Watch() {
                         <p className="watch-info__description">{detail.description}</p>
                     </div>
 
-                    {/* Columna derecha — reproductor YouTube */}
+                    {/* Columna derecha — reproductor Bitmovin */}
                     <div className="watch-player">
                         <span className="watch-player__label">
-                            {detail.content_type === 'movie' ? 'Trailer oficial' : 'Trailer'}
+                            {detail.content_type === 'movie' ? 'Reproduciendo película' : 'Reproduciendo serie'}
                         </span>
 
-                        {detail.trailer_key ? (
-                            <div className="watch-player__frame-wrapper">
-                                <iframe
-                                    className="watch-player__iframe"
-                                    src={`https://www.youtube.com/embed/${detail.trailer_key}?rel=0&modestbranding=1`}
-                                    title={`Trailer de ${detail.title}`}
-                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                    allowFullScreen
-                                />
-                            </div>
-                        ) : (
-                            <div className="watch-player__no-trailer">
-                                <span>🎬</span>
-                                <span>Trailer no disponible</span>
-                            </div>
-                        )}
+                        <BitmovinVideoPlayer
+                            stream={detail.stream}
+                            title={detail.title}
+                            poster={detail.backdrop}
+                        />
                     </div>
 
                 </div>

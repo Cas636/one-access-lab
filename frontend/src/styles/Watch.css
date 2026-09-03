@@ -213,6 +213,20 @@
     border: none;
 }
 
+/* Contenedor del player de Bitmovin: llena el wrapper 16:9 en absoluto */
+.watch-player__bitmovin {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.watch-player__bitmovin .bmpui-ui-uicontainer,
+.watch-player__bitmovin video {
+    width: 100%;
+    height: 100%;
+}
+
 /* Sin trailer disponible */
 .watch-player__no-trailer {
     display: flex;

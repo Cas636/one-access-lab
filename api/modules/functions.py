@@ -144,6 +144,14 @@ TMDB_BASE_URL = "https://api.themoviedb.org/3"
 BASE_IMAGE_W500 = "https://image.tmdb.org/t/p/w500"
 BASE_IMAGE_ORIGINAL = "https://image.tmdb.org/t/p/original"
 
+# Manifest de prueba para el reproductor Bitmovin.
+# TMDB no provee streams reales; usamos el stream de demo de Bitmovin (Sintel).
+# Cuando existan streams reales por título, reemplazar por la fuente correspondiente.
+TEST_STREAM = {
+    "hls": "https://demo.unified-streaming.com/k8s/features/stable/video/tears-of-steel/tears-of-steel.ism/.m3u8",
+    "dash": "https://demo.unified-streaming.com/k8s/features/stable/video/tears-of-steel/tears-of-steel.ism/.mpd",
+}
+
 
 def get_content_detail(content_type: str, content_id: str) -> dict:
     """
@@ -201,6 +209,7 @@ def get_content_detail(content_type: str, content_id: str) -> dict:
         "thumbnail": BASE_IMAGE_W500 + poster_path if poster_path else "",
         "backdrop": BASE_IMAGE_ORIGINAL + backdrop_path if backdrop_path else "",
         "trailer_key": trailer_key,
+        "stream": TEST_STREAM,
         "duration": duration,
         "genres": genres,
         "rating": rating,
